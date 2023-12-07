@@ -209,7 +209,63 @@
                     </div>
                 </div>
             </div>
-            
+            <script>
+                const id = new URLSearchParams(window.location.search).get('id');
+                var max_people = 0
+                var hotel_price = 0
+                // Sử dụng fetch() để tải file JSON
+                fetch(`backend/get_hotels.php?id=${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Lặp qua từng phần tử trong mảng data
+                        data.forEach(function (item) {
+                            
+                            if (getCookie("name")) document.querySelector("#user_name").value=decodeURIComponent(getCookie("name"))
+
+                            document.querySelector("form").action="/backend/add.php?booking_id="+id
+                            document.querySelector(".form-group.mb-2.people strong").textContent=item.max_people
+                            document.querySelector(".form-group.mb-2.people input").value=item.max_people
+                            document.querySelector("a.hotel_name").textContent=item.name
+                            document.querySelector("a.hotel_name").href=`hotel-info.html?id=${id}`
+                            document.querySelector("h6.hotel_city").innerHTML=`<i class="icon-location-pin"></i> ${item.city}`
+                            document.querySelector(".trend-item2.rounded a").style.backgroundImage = `url("${item.img}")`
+                            max_people = item.max_people
+                            hotel_price = item.price
+                        });
+                    })
+                    .catch(error => alert('Lỗi khi tải dữ liệu JSON:', error));
+
+                function total() {
+                    // Lấy giá trị từ ô input
+                    var rooms = document.querySelector(".rooms input").value;
+                    var people = document.querySelector(".people input").value;
+                    var checkin = document.querySelector(".checkin input").value.split("-");
+                    var checkout = document.querySelector(".checkout input").value.split("-");
+
+                    document.querySelector("h6.hotel_quantity").textContent=`${rooms} phòng | ${people} người`
+                    // Hiển thị sang bảng hóa đơn - checkin/checkout
+                    if (checkin.length !=1 && checkout.length !=1){
+                        document.querySelector("h6.checkin").textContent=`${checkin[2]} Th${checkin[1]}, ${checkin[0]}`;
+                        document.querySelector("h6.checkout").textContent=`${checkout[2]} Th${checkout[1]}, ${checkout[0]}`;
+                        var ngay1 = new Date(checkin[0], checkin[1] - 1, checkin[2]);
+                        var ngay2 = new Date(checkout[0], checkout[1] - 1, checkout[2]);
+                        var soNgay = (ngay2.getTime() - ngay1.getTime()) / (1000 * 60 * 60 * 24);
+                        document.querySelector("h6.days").textContent=`${soNgay+1} ngày | ${soNgay} đêm`;
+                        document.querySelector("td.days").textContent= (soNgay+1)
+
+                        // Tính toán chi phí
+                        if (max_people*rooms>=people){
+                            document.querySelector("td.hotel_quantity").textContent="0 VNĐ"
+                            document.querySelector("th.total").textContent=(hotel_price*(soNgay+1)).toLocaleString()+" VNĐ"
+                        }
+                        else{
+                            document.querySelector("td.hotel_quantity").textContent=(100000*(people-max_people*rooms)*(soNgay+1)).toLocaleString()+" VNĐ"
+                            document.querySelector("th.total").textContent=(hotel_price*(soNgay+1)+(100000*(people-max_people*rooms)*(soNgay+1))).toLocaleString()+" VNĐ"
+                        }
+
+                    }
+                }
+            </script>
         </div>
     </div>
 </section>

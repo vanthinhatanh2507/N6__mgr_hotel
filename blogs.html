@@ -95,6 +95,46 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Thêm bảng từ DB -->
+                        <script>
+                            // Tìm div có id là "hotels"
+                            var hotelsDiv = document.getElementById("blogs");
+
+                            // Tạo một bản sao và xóa mẫu
+                            var divToClone = hotelsDiv.querySelector(".col-lg-6").cloneNode(true);
+                            hotelsDiv.querySelector(".col-lg-6").remove()
+
+                            // Sử dụng fetch() để tải file JSON
+                            fetch('backend/get_blogs.php')
+                                .then(response => response.json())
+                                .then(data => {
+                                    // Lặp qua từng phần tử trong mảng data
+                                    data.forEach(function (item) {
+                                        // Tạo một bản sao của divToClone
+                                        var clonedDiv = divToClone.cloneNode(true);
+
+                                        // Thay thế nội dung của div
+                                        clonedDiv.querySelector("#blog_title").innerHTML = `<a href="blog-info.html?id=${item.id}">${item.title}</a>`;
+                                        clonedDiv.querySelector("#blog_type").textContent = item.type;
+                                        clonedDiv.querySelector("#blog_more").href = `blog-info.html?id=${item.id}`;
+                                        clonedDiv.querySelector("#blog_img").src = item.img;
+                                        if (item.star_quantity != 0)
+                                            clonedDiv.querySelectorAll(".rating span").forEach(function (number, index) {
+                                                if ((item.star_total) / (item.star_quantity) <= index)
+                                                    number.classList.add("grey")
+                                            });
+                                        else
+                                            clonedDiv.querySelectorAll(".rating span").forEach(function (number) {
+                                                number.classList.add("grey")
+                                            });
+                                        // clonedDiv.querySelector("#hotel_city").textContent = item.city;
+                                        clonedDiv.querySelector("#blog_subtitle").innerHTML = item.des.split(" ").slice(0, 20).join(" ") + ` ...`;
+                                        // // Thêm clonedDiv vào trang (ví dụ: vào div có id "body")
+                                        hotelsDiv.appendChild(clonedDiv);
+                                    });
+                                })
+                                .catch(error => alert('Lỗi khi tải dữ liệu JSON:', error));
+                        </script>
 
                     </div>
                 </div>
@@ -233,6 +273,22 @@
 
 <div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
 </div>
+<script>
+    // Sử dụng JavaScript để tải và hiển thị một div từ trang web khác
+    var exampleModal = document.getElementById("exampleModal");
+    // Sử dụng fetch để tải nội dung từ URL
+    fetch("login.html")
+        .then(response => response.text())
+        .then(data => {
+            // Tạo một phần tử div ẩn để chứa nội dung tải về
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data;
+            exampleModal.innerHTML = tempDiv.querySelector('#login').innerHTML;
+        })
+        .catch(error => {
+            console.error('Lỗi: ', error);
+        });
+</script>
 
 <script data-cfasync="false" src="js/email-decode.min.js"></script>
 <script src="js/jquery-3.5.1.min.js"></script>

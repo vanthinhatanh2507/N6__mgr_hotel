@@ -143,7 +143,69 @@
                                     </div>
                                 </div>
                             </div>
+                            <script>
+                                // Lấy tham chiếu đến nút "Tìm ngay!" và các thẻ select
+                                const searchButton = document.getElementById("searchButton");
+                                const booking_id = document.getElementById("booking_id");
 
+                                // Thêm sự kiện click cho nút "Tìm ngay!"
+                                searchButton.addEventListener("click", function () {
+                                    var max_people = document.querySelector("#max_people").value;
+                                    var rooms = document.querySelector("#rooms").value;
+                                    var quantity = document.querySelector("#quantity").value;
+                                    var name = document.querySelector("#name").value;
+                                    window.location.href = `hotel.html?name=${name}&max_people=${max_people}&rooms=${rooms}&quantity=${quantity}`;
+                                });
+
+                                function closeModel() {
+                                    document.querySelector("#myModal").style.display = "none"
+                                }
+                                if (window.location.href.includes("?id")) {
+                                    const index = new URLSearchParams(window.location.search)
+                                    fetch(`backend/get_booking.php`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            item = data[data.length-1]
+                                            alert(`Lưu lại mã đặt phòng của bạn: ${item.id}`)
+                                            document.querySelector(".modal-body h3 strong").textContent = item.name
+                                            document.querySelector(".modal-body h4 strong").textContent = item.id
+                                            document.querySelector(".modal-body p").innerHTML = `Đặt phòng khách sạn: <a href="hotel-info.html?id=${item.hotel_id}">${item.hotel_name}</a>`
+                                            document.querySelector(".modal-body img").src = item.img
+                                            document.querySelector(".modal-body").querySelectorAll(".personal-info li")[0].textContent = "Giới tính: " + item.gender
+                                            document.querySelector(".modal-body").querySelectorAll(".personal-info li")[1].textContent = "Email: " + item.email
+                                            document.querySelector(".modal-body").querySelectorAll(".room-info li")[0].textContent = "Số lượng phòng đặt: " + item.rooms
+                                            document.querySelector(".modal-body").querySelectorAll(".room-info li")[1].textContent = "Số lượng người: " + item.people
+                                            document.querySelector(".modal-body").querySelectorAll(".checkin-out a")[0].textContent = "Ngày nhập phòng: " + item.checkin
+                                            document.querySelector(".modal-body").querySelectorAll(".checkin-out a")[1].textContent = "Ngày trả phòng: " + item.checkout
+
+                                            document.querySelector("#myModal").style.display = "block"
+                                        })
+                                        .catch(error => alert('Không có dữ liệu', error));
+                                }
+                                // Thêm sự kiện click cho nút "Tìm ngay!"
+                                booking_id.addEventListener("click", function () {
+                                    fetch('backend/get_booking.php?id='+document.querySelector("#booking_search").value)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            item = data[0]
+
+                                            document.querySelector(".modal-body h3 strong").textContent = item.name
+                                            document.querySelector(".modal-body h4 strong").textContent = item.id
+                                            document.querySelector(".modal-body p").innerHTML = `Đặt phòng khách sạn: <a href="hotel-info.html?id=${item.hotel_id}">${item.hotel_name}</a>`
+                                            document.querySelector(".modal-body img").src = item.img
+                                            document.querySelector(".modal-body").querySelectorAll(".personal-info li")[0].textContent = "Giới tính: " + item.gender
+                                            document.querySelector(".modal-body").querySelectorAll(".personal-info li")[1].textContent = "Email: " + item.email
+                                            document.querySelector(".modal-body").querySelectorAll(".room-info li")[0].textContent = "Số lượng phòng đặt: " + item.rooms
+                                            document.querySelector(".modal-body").querySelectorAll(".room-info li")[1].textContent = "Số lượng người: " + item.people
+                                            document.querySelector(".modal-body").querySelectorAll(".checkin-out a")[0].textContent = "Ngày nhập phòng: " + item.checkin
+                                            document.querySelector(".modal-body").querySelectorAll(".checkin-out a")[1].textContent = "Ngày trả phòng: " + item.checkout
+
+                                            document.querySelector("#myModal").style.display = "block"
+                                        })
+                                        .catch(error => alert('Không có dữ liệu', error));
+
+                                });
+                            </script>
                         </div>
                     </div>
                     <div class="col-lg-6 mb-4">
@@ -275,7 +337,95 @@
             </div>
         </div>
     </section>
+    <script>
 
+        fetch('backend/get_hotels.php')
+            .then(response => response.json())
+            .then(data => {
+                // Sắp xếp mảng theo star_total/star_quantity giảm dần
+                data.sort((a, b) => {
+                    // Tính tỷ lệ star_total/star_quantity cho a và b
+                    var ratioA = a.star_total / a.star_quantity;
+                    var ratioB = b.star_total / b.star_quantity;
+
+                    // So sánh và trả về kết quả dựa trên tỷ lệ, để sắp xếp giảm dần
+                    return ratioB - ratioA;
+                });
+
+                var divToClone = document.querySelector(".trend-box").cloneNode(true);
+                document.querySelector(".trend-box .trend-item1").remove()
+                document.querySelector(".trend-box .col-lg-6").remove()
+                // Lặp qua từng phần tử trong mảng data
+                data.forEach(function (item, index) {
+                    if (index <= 2) {
+                        // Tạo một bản sao của divToClone
+                        var clonedDiv = divToClone.querySelector(".col-lg-5 .trend-item1").cloneNode(true);
+                        // Thay thế nội dung của div
+                        clonedDiv.querySelector("h5").innerHTML = `<i class="flaticon-location-pin"></i>${item.city}`;
+                        clonedDiv.querySelector("h3").innerHTML = `<a class="white" href="hotel-info.html?id=${item.id}" id="hotel_name">${item.name}</a>`;;
+                        clonedDiv.querySelector("img").src = item.img;
+                        if (item.star_quantity != 0)
+                            clonedDiv.querySelectorAll(".rating span").forEach(function (number, index) {
+                                if ((item.star_total) / (item.star_quantity) <= index)
+                                    number.classList.add("grey")
+                            });
+                        else
+                            clonedDiv.querySelectorAll(".rating span").forEach(function (number) {
+                                number.classList.add("grey")
+                            });
+                        clonedDiv.querySelector("p span").textContent = item.price.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ";
+                        clonedDiv.querySelector("span.ms-2.white").textContent = `(${item.star_quantity})`;
+
+                        document.querySelector(".trend-box .col-lg-5").appendChild(clonedDiv);
+                    } else if (index <= 6) {
+                        // Tạo một bản sao của divToClone
+                        var clonedDiv = divToClone.querySelector(".col-lg-7 .col-lg-6").cloneNode(true);
+                        // Thay thế nội dung của div
+                        clonedDiv.querySelector("h5").innerHTML = `<i class="flaticon-location-pin"></i>${item.city}`;
+                        clonedDiv.querySelector("h3").innerHTML = `<a href="hotel-info.html?id=${item.id}">${item.name}</a>`;;
+                        clonedDiv.querySelector("img").src = item.img;
+                        if (item.star_quantity != 0)
+                            clonedDiv.querySelectorAll(".rating span").forEach(function (number, index) {
+                                if ((item.star_total) / (item.star_quantity) <= index)
+                                    number.classList.add("grey")
+                            });
+                        else
+                            clonedDiv.querySelectorAll(".rating span").forEach(function (number) {
+                                number.classList.add("grey")
+                            });
+                        clonedDiv.querySelector("p span").textContent = item.price.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ";
+                        clonedDiv.querySelector("span.ms-2").textContent = `(${item.star_quantity})`;
+                        clonedDiv.querySelector(".border-b").innerHTML = item.des.split(" ").slice(0, 15).join(" ") + `...<br><a href="hotel-info.html?id=${item.id}"><strong>Đọc thêm</strong></a>`;
+                        document.querySelector(".trend-box .col-lg-7 .row").appendChild(clonedDiv);
+                    }
+                });
+            })
+            .catch(error => {
+                alert('Không có dữ liệu', error)
+                if (queryString) window.location.href = "index.html";
+            });
+
+        // Sử dụng fetch() để tải file JSON
+        fetch(`backend/get_blogs.php`)
+            .then(response => response.json())
+            .then(data => {
+                var divToClone = document.querySelector(".recent-articles-inner .col-md-4").cloneNode(true);
+                document.querySelector(".recent-articles-inner .col-md-4").remove()
+                data.forEach(function (item, index) {
+                    // Tạo một bản sao của divToClone
+                    var clonedDiv = divToClone.cloneNode(true);
+                    // Thay thế nội dung của div
+                    clonedDiv.querySelector("h4").innerHTML = `<a href="blog-info.html?id=${item.id}">${item.title}</a>`;
+                    clonedDiv.querySelector("h5").textContent = item.type;
+                    clonedDiv.querySelector(".entry-button a").href = `blog-info.html?id=${item.id}`;
+                    clonedDiv.querySelector("img").src = item.img;
+                    clonedDiv.querySelector("p.mb-3").innerHTML = item.des.split(" ").slice(0, 20).join(" ") + ` ...`;
+                    if (index <= 2) document.querySelector(".recent-articles-inner .row").appendChild(clonedDiv);
+                });
+            })
+            .catch(error => alert('Lỗi khi tải dữ liệu JSON:', error));
+
+    </script>
     <!-- Nội dung footer -->
     <footer class="pt-20 pb-4" style="background-image: url(images/background_pattern.png);" id="footer"></footer>
     <script>
@@ -294,7 +444,22 @@
 
     <div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
     </div>
-
+    <script>
+        // Sử dụng JavaScript để tải và hiển thị một div từ trang web khác
+        var exampleModal = document.getElementById("exampleModal");
+        // Sử dụng fetch để tải nội dung từ URL
+        fetch("login.html")
+            .then(response => response.text())
+            .then(data => {
+                // Tạo một phần tử div ẩn để chứa nội dung tải về
+                var tempDiv = document.createElement('div');
+                tempDiv.innerHTML = data;
+                exampleModal.innerHTML = tempDiv.querySelector('#login').innerHTML;
+            })
+            .catch(error => {
+                console.error('Lỗi: ', error);
+            });
+    </script>
     <script data-cfasync="false" src="js/email-decode.min.js"></script>
     <script src="js/jquery-3.5.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>

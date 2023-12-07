@@ -495,4 +495,80 @@ function resize_eb_slider() {
 }
 
 
+function hienThiThoiGian() {
+    var thoiGianHienTai = new Date();
+    var ngay = thoiGianHienTai.toLocaleDateString().split("/");
+    var gio = thoiGianHienTai.getHours();
+    var phut = thoiGianHienTai.getMinutes();
+    var giay = thoiGianHienTai.getSeconds();
+    document.querySelector("a.date_now").innerHTML = `<i class="icon-calendar white"></i> ${ngay[0]} Th${ngay[1]}, ${ngay[2]}`
+    document.querySelector("a.time_now").innerHTML = `<i class="icon-clock white"></i> ${gio}:${phut}:${giay}</a>`
+}
+
+async function signUp() {
+    const check = document.querySelector("#floatingInputInvalid input");
+    if (check.value !== "") {
+        document.querySelector("#floatingInputInvalid label").textContent = "";
+        check.classList.remove("is-invalid");
+        check.classList.add("is-valid");
+        document.querySelector("#signup").disabled = false
+        document.querySelector("#signup").classList.remove("btn-secondary")
+    } else {
+        check.classList.remove("is-valid");
+        check.classList.add("is-invalid");
+        document.querySelector("#floatingInputInvalid label").textContent = "Vui lòng nhập nội dung";
+        document.querySelector("#signup").disabled = true
+        document.querySelector("#signup").classList.add("btn-secondary")
+        return;
+    }
+
+    try {
+        const response = await fetch('backend/get_user.php');
+        if (response.ok) {
+            const data = await response.json();
+            if (data.some(item => item.username === check.value)) {
+                check.classList.remove("is-valid");
+                check.classList.add("is-invalid");
+                document.querySelector("#floatingInputInvalid label").textContent = "Tên đăng nhập đã tồn tại";
+                document.querySelector("#signup").disabled = true
+                document.querySelector("#signup").classList.add("btn-secondary")
+            } else {
+                check.classList.remove("is-invalid");
+                check.classList.add("is-valid");
+                document.querySelector("#signup").disabled = false
+                document.querySelector("#signup").classList.remove("btn-secondary")
+            }
+        } else {
+            throw new Error('Lỗi khi lấy dữ liệu từ máy chủ');
+        }
+    } catch (error) {
+        alert('Lỗi:', error);
+    }
+}
+
+// Gọi hàm hiển thị thời gian một lần để hiển thị ngay khi trang được tải lên
+
+// Sử dụng setInterval để cập nhật thời gian từng giây
+setInterval(hienThiThoiGian, 1000); // 1000 ms = 1 giây
+// Hàm lấy giá trị của cookie
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    hienThiThoiGian();
+    if (getCookie("name")) {
+        document.querySelector(".register-login.align-items-center").innerHTML = `<div><i class="icon-user"></i> ${decodeURIComponent(getCookie("name"))}</div> <hr> <a href="backend/diecookie.php">Đăng xuất</a>`
+    } else {
+        var urlParams = new URLSearchParams(window.location.search);
+        var error = urlParams.get('error');
+        if (error === "true") {
+            alert("Sai tài khoản mật khẩu!");
+        }
+    }
+});
+
+
 

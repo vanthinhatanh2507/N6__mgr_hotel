@@ -21,6 +21,20 @@
 
 <!-- Nội dung header  -->
 <header id="header" class="main_header_area"></header>
+<script>
+    // Fetch nội dung header
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header').innerHTML = data;
+
+            // Thêm lớp 'active' cho phần tử có class 'sv'
+            const svElement = document.querySelector('#hotel');
+            if (svElement) {
+                svElement.classList.add('active');
+            }
+        });
+</script>
 
 <section class="breadcrumb-main pb-20 pt-14" style="background-image: url(images/bg/bg1.jpg);">
     <div class="section-shape section-shape1 top-inherit bottom-0" style="background-image: url(images/shape8.png);">
@@ -179,7 +193,148 @@
         </div>
     </div>
 </section>
+<!-- Thêm bảng từ DB -->
+<script>
+    // Tìm div có id là "hotels"
+    var hotelsDiv = document.querySelector(".destination-list");
+    // Tạo một bản sao và xóa mẫu
+    var divToClone = hotelsDiv.querySelector(".trend-full").cloneNode(true);
+    hotelsDiv.querySelector(".trend-full").remove()
 
+    var result
+    fetch('backend/get_hotels.php')
+        .then(response => response.json())
+        .then(data => {
+            if (window.location.href.includes("?")) {
+                const index = new URLSearchParams(window.location.search)
+                document.querySelector(".search_hotel input").value = index.get("name")
+                document.querySelectorAll(".benefits input")[0].value = index.get("max_people")
+                document.querySelectorAll(".benefits input")[1].value = index.get("rooms")
+                document.querySelectorAll(".benefits input")[2].value = index.get("quantity")
+            }
+            result = data
+            document.querySelector(".list-results-sort p strong").textContent = data.length;
+            // Lặp qua từng phần tử trong mảng data
+            data.forEach(function (item) {
+                // Tạo một bản sao của divToClone
+                var clonedDiv = divToClone.cloneNode(true);
+                // Thay thế nội dung của div
+                clonedDiv.querySelector("h3").innerHTML = `<a href="hotel-info.html?id=${item.id}" id="hotel_name">${item.name}</a>`;
+                clonedDiv.querySelector("img").src = item.img;
+                clonedDiv.querySelector(".trend-content small").innerHTML = `<i class="fa fa-group pink mr-1"></i> ${item.max_people} || <i class="fa fa-group fa-bed"></i> ${item.rooms}`
+                clonedDiv.querySelector("h6").innerHTML = `<i class="icon-location-pin"></i> ${item.city}`;
+                clonedDiv.querySelector("p.mt-4").innerHTML = `${item.type} <br> <a><span class="theme">Còn ${item.quantity} phòng</span></a>`;
+                if (item.star_quantity != 0)
+                    clonedDiv.querySelectorAll(".rating span").forEach(function (number, index) {
+                        if ((item.star_total) / (item.star_quantity) <= index)
+                            number.classList.add("grey")
+                    });
+                else
+                    clonedDiv.querySelectorAll(".rating span").forEach(function (number) {
+                        number.classList.add("grey")
+                    });
+                clonedDiv.querySelector(".trend-price h3").textContent = item.price.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ";
+                clonedDiv.querySelector(".text-md-end small").textContent = item.star_quantity + " lượt đánh giá";
+                clonedDiv.querySelector('.text-md-end a').href = `booking.html?id=${item.id}`;
+                // // Thêm clonedDiv vào trang (ví dụ: vào div có id "body")
+                hotelsDiv.appendChild(clonedDiv);
+            });
+        })
+        .catch(error => {
+            alert('Không có dữ liệu', error)
+            if (queryString) window.location.href = "index.html";
+        });
+
+    var minPrice = 0
+    var maxPrice = 10000000
+    function handleSliderChange(minValue, maxValue) {
+        // Thực hiện hành động mong muốn với giá trị min và max
+        minPrice = minValue
+        maxPrice = maxValue
+        fill()
+    }
+    setTimeout(fill, 500)
+    function fill() {
+        // Lấy giá trị của các trường trong bộ lọc
+        let minPeople = parseInt(document.getElementById("max_people").value);
+        let minRooms = parseInt(document.getElementById("rooms").value);
+        let minQuantity = parseInt(document.getElementById("quantity").value);
+        let sortby = document.querySelector(".niceSelect option:checked").value;
+        let search_hotel = document.querySelector(".search_hotel input").value;
+
+        if (!minPeople) minPeople = 0
+        if (!minRooms) minRooms = 0
+        if (!minQuantity) minQuantity = 0
+        var benefits = "";
+        for (let i = 1; i <= 4; i++) {
+            if (document.getElementById("benefits" + i).checked) {
+                benefits += i;
+            }
+        }
+
+        if (document.getElementById("type1").checked)
+            type = document.getElementById("type1").value
+        else if (document.getElementById("type2").checked)
+            type = document.getElementById("type2").value
+        else
+            type = ""
+
+        if (document.getElementById("city1").checked)
+            city = document.getElementById("city1").value
+        else if (document.getElementById("city2").checked)
+            city = document.getElementById("city2").value
+        else if (document.getElementById("city3").checked)
+            city = document.getElementById("city3").value
+        else
+            city = ""
+
+        // Hàm lọc dữ liệu
+        const filteredData = result.filter((hotel) => {
+            const fillPeople = minPeople <= parseInt(hotel.max_people);
+            const fillRooms = minRooms <= parseInt(hotel.rooms);
+            const fillQuantity = minQuantity <= parseInt(hotel.quantity);
+            const fillMinPrice = minPrice <= parseInt(hotel.price);
+            const fillMaxPrice = maxPrice > parseInt(hotel.price);
+            const fillBenefits = hotel.benefits.includes(benefits);
+            const fillType = hotel.type.includes(type);
+            const fillCity = hotel.city.includes(city);
+            const fillSearch_hotel = hotel.name.toLowerCase().includes(search_hotel.toLowerCase())
+            // console.log(" "+fillPeople + fillRooms + fillQuantity + fillBenefits + fillType + fillCity + fillMinPrice + fillMaxPrice)
+            return fillPeople && fillRooms && fillQuantity && fillBenefits && fillType && fillCity && fillMinPrice && fillMaxPrice && fillSearch_hotel
+        });
+        if (sortby == 1) filteredData.sort((a, b) => parseInt(a.id) - parseInt(b.id))
+        else if (sortby == 2) filteredData.sort((a, b) => parseInt(b.star_avg) - parseInt(a.star_avg))
+        else if (sortby == 3) filteredData.sort((a, b) => parseInt(a.price) - parseInt(b.price))
+        else if (sortby == 4) filteredData.sort((a, b) => parseInt(b.price) - parseInt(a.price))
+
+        hotelsDiv.innerHTML = ""
+        document.querySelector(".list-results-sort p strong").textContent = filteredData.length;
+        filteredData.forEach(function (item) {
+            var clonedDiv = divToClone.cloneNode(true);
+            // Thay thế nội dung của div
+            clonedDiv.querySelector("h3").innerHTML = `<a href="hotel-info.html?id=${item.id}" id="hotel_name">${item.name}</a>`;
+            clonedDiv.querySelector("img").src = item.img;
+            clonedDiv.querySelector(".trend-content small").innerHTML = `<i class="fa fa-group pink mr-1"></i> ${item.max_people} || <i class="fa fa-group fa-bed"></i> ${item.rooms}`
+            clonedDiv.querySelector("h6").innerHTML = `<i class="icon-location-pin"></i> ${item.city}`;
+            clonedDiv.querySelector("p.mt-4").innerHTML = `${item.type} <br> <a><span class="theme">Còn ${item.quantity} phòng</span></a>`;
+            if (item.star_quantity != 0)
+                clonedDiv.querySelectorAll(".rating span").forEach(function (number, index) {
+                    if ((item.star_total) / (item.star_quantity) <= index)
+                        number.classList.add("grey")
+                });
+            else
+                clonedDiv.querySelectorAll(".rating span").forEach(function (number) {
+                    number.classList.add("grey")
+                });
+            clonedDiv.querySelector(".trend-price h3").textContent = item.price.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ";
+            clonedDiv.querySelector(".text-md-end small").textContent = item.star_quantity + " lượt đánh giá";
+            clonedDiv.querySelector('.text-md-end a').href = `booking.html?id=${item.id}`;
+            // // Thêm clonedDiv vào trang (ví dụ: vào div có id "body")
+            hotelsDiv.appendChild(clonedDiv);
+        });
+    }
+
+</script>
 <section class="our-partner pb-6 pt-6">
     <div class="container">
         <div class="section-title mb-6 w-75 mx-auto text-center">
