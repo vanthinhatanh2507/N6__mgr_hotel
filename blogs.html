@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EZStayHub - Bài viết</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+    <link href="css/plugin.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="fonts/line-icons.css" type="text/css">
+</head>
+
+<div id="preloader">
+    <div id="status"></div>
+</div>
+
+
+<!-- Nội dung header  -->
+<header id="header" class="main_header_area"></header>
+<script>
+    // Fetch nội dung header
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header').innerHTML = data;
+
+            const svElement = document.querySelector('#blogs');
+            if (svElement) {
+                svElement.classList.add('active');
+            }
+        });
+</script>
+
+
+<section class="breadcrumb-main pb-20 pt-14" style="background-image: url(images/bg/bg1.jpg);">
+    <div class="section-shape section-shape1 top-inherit bottom-0" style="background-image: url(images/shape8.png);">
+    </div>
+    <div class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content text-center">
+                <h1 class="mb-3">Bài viết</h1>
+                <nav aria-label="breadcrumb" class="d-block">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Bài viết</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="dot-overlay"></div>
+</section>
+
+
+<section class="blog">
+    <div class="container">
+        <div class="row flex-row-reverse">
+            <div class="col-lg-8 ps-lg-4">
+                <div class="listing-inner">
+                    <div class="row" id="blogs">
+
+                        <div class="col-lg-6">
+                            <div class="trend-item box-shadow bg-white mb-4 rounded overflow-hidden">
+                                <div class="trend-image">
+                                    <img src="" alt="image" id="blog_img">
+                                </div>
+                                <div class="trend-content-main p-4 pb-2">
+                                    <div class="trend-content">
+                                        <h5 class="theme mb-1" id="blog_type"></h5>
+                                        <div class="rating">
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                        </div>
+                                        <h4 id="blog_title"><a href="blog-info.html"></a></h4>
+                                        <p class="mb-3" id="blog_subtitle">
+                                        </p>
+                                        <div class="entry-meta d-flex align-items-center justify-content-between">
+                                            <div class="entry-button d-flex align-items-center mb-2">
+                                                <a href="" class="nir-btn" id="blog_more">Đọc thêm</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 pe-lg-4">
+                <div class="sidebar-sticky">
+                    <div class="list-sidebar">
+                        <div class="sidebar-item">
+                            <h4 class>Tìm kiếm</h4>
+                            <div class="newsletter-form rounded overflow-hidden position-relative">
+                                <form>
+                                    <input type="text" placeholder="Nhập từ khóa tìm kiếm tại đây.." id="keyword">
+                                    <input type="submit" class="nir-btn bordernone rounded-0 position-absolute end-0"
+                                        value="Tìm" onclick="search()"">
+                                </form>
+                            </div>
+                        </div>
+                        <div class=" sidebar-item mb-4">
+                                    <h4 class>Lọc hiển thị</h4>
+                                    <ul class="sidebar-category">
+                                        <li onclick="makeActive(this,'all')" class="active"><a>Tất cả</a></li>
+                                        <li onclick="makeActive(this,'Review khách sạn')"><a>Review khách sạn</a></li>
+                                        <li onclick="makeActive(this,'Du lịch')"><a>Du lịch</a></li>
+                                        <li onclick="makeActive(this,'Ẩm thực')"><a>Ẩm thực</a></li>
+                                    </ul>
+                            </div>
+                            <!-- Kích hoạt tab -->
+                            <script>
+                                function makeActive(element, type) {
+                                    var divsToBeRemoved = hotelsDiv.querySelectorAll(".col-lg-6")
+                                    divsToBeRemoved.forEach(function (div) {
+                                        div.remove();
+                                    });
+
+                                    // Sử dụng fetch() để tải file JSON
+                                    fetch(`backend/get_blogs.php?type=${type}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Lặp qua từng phần tử trong mảng data
+                                            data.forEach(function (item) {
+                                                // Tạo một bản sao của divToClone
+                                                var clonedDiv1 = divToClone.cloneNode(true);
+
+                                                // Thay thế nội dung của div
+                                                clonedDiv1.querySelector("#blog_title").innerHTML = `<a href="blog-info.html?id=${item.id}">${item.title}</a>`;
+                                                clonedDiv1.querySelector("#blog_type").textContent = item.type;
+                                                clonedDiv1.querySelector("#blog_more").href = `blog-info.html?id=${item.id}`;
+                                                clonedDiv1.querySelector("#blog_img").src = item.img;
+                                                if (item.star_quantity != 0)
+                                                    clonedDiv1.querySelectorAll(".rating span").forEach(function (number, index) {
+                                                        if ((item.star_total) / (item.star_quantity) <= index)
+                                                            number.classList.add("grey")
+                                                    });
+                                                else
+                                                    clonedDiv1.querySelectorAll(".rating span").forEach(function (number) {
+                                                        number.classList.add("grey")
+                                                    });
+                                                clonedDiv1.querySelector("#blog_subtitle").innerHTML = item.des.split(" ").slice(0, 20).join(" ") + ` ...`;
+                                                // // Thêm clonedDiv1 vào trang (ví dụ: vào div có id "body")
+                                                hotelsDiv.appendChild(clonedDiv1);
+                                            });
+                                        })
+                                        .catch(error => alert('Lỗi khi tải dữ liệu JSON:', error));
+
+                                    // Xóa lớp "active" từ tất cả các phần tử li trong cùng một danh sách (nếu cần).
+                                    const lis = document.querySelectorAll(".sidebar-item.mb-4 .sidebar-category li");
+                                    lis.forEach(li => li.classList.remove('active'));
+                                    // Thêm lớp "active" cho phần tử li được bấm.
+                                    element.classList.add('active');
+                                }
+
+                                function search() {
+                                    var keyword = document.getElementById("keyword").value;
+                                    var divsToBeRemoved = hotelsDiv.querySelectorAll(".col-lg-6")
+                                    divsToBeRemoved.forEach(function (div) {
+                                        div.remove();
+                                    });
+
+                                    // Sử dụng fetch() để tải file JSON
+                                    fetch(`backend/get_blogs.php?search=${keyword}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Lặp qua từng phần tử trong mảng data
+                                            data.forEach(function (item) {
+                                                // Tạo một bản sao của divToClone
+                                                var clonedDiv1 = divToClone.cloneNode(true);
+
+                                                // Thay thế nội dung của div
+                                                clonedDiv1.querySelector("#blog_title").innerHTML = `<a href="blog-info.html?id=${item.id}">${item.title}</a>`;
+                                                clonedDiv1.querySelector("#blog_type").textContent = item.type;
+                                                clonedDiv1.querySelector("#blog_more").href = `blog-info.html?id=${item.id}`;
+                                                clonedDiv1.querySelector("#blog_img").src = item.img;
+                                                if (item.star_quantity != 0)
+                                                    clonedDiv1.querySelectorAll(".rating span").forEach(function (number, index) {
+                                                        if ((item.star_total) / (item.star_quantity) <= index)
+                                                            number.classList.add("grey")
+                                                    });
+                                                else
+                                                    clonedDiv1.querySelectorAll(".rating span").forEach(function (number) {
+                                                        number.classList.add("grey")
+                                                    });
+                                                clonedDiv1.querySelector("#blog_subtitle").innerHTML = item.des.split(" ").slice(0, 20).join(" ") + ` ...`;
+                                                // // Thêm clonedDiv1 vào trang (ví dụ: vào div có id "body")
+                                                hotelsDiv.appendChild(clonedDiv1);
+                                            });
+                                        })
+                                        .catch(error => alert('Lỗi khi tải dữ liệu JSON:', error));
+
+                                    // Xóa lớp "active" từ tất cả các phần tử li trong cùng một danh sách (nếu cần).
+                                    const lis = document.querySelectorAll(".sidebar-item.mb-4 .sidebar-category li");
+                                    lis.forEach(li => li.classList.remove('active'));
+                                    // Thêm lớp "active" cho phần tử li được bấm.
+                                    element.classList.add('active');
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+
+<!-- Nội dung footer -->
+<footer class="pt-20 pb-4" style="background-image: url(images/background_pattern.png);" id="footer"></footer>
+<script>
+    // Fetch nội dung footer
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer').innerHTML = data;
+        });
+</script>
+
+<div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
+</div>
+
+<script data-cfasync="false" src="js/email-decode.min.js"></script>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/particlerun.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/main.js"></script>
+<script src="js/custom-nav.js"></script>
+<script>(function () { var js = "window['__CF$cv$params']={r:'8137fb0f19850963',t:'MTY5Njg2ODczOC42ODUwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='dffb14d6/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);"; var _0xh = document.createElement('iframe'); _0xh.height = 1; _0xh.width = 1; _0xh.style.position = 'absolute'; _0xh.style.top = 0; _0xh.style.left = 0; _0xh.style.border = 'none'; _0xh.style.visibility = 'hidden'; document.body.appendChild(_0xh); function handler() { var _0xi = _0xh.contentDocument || _0xh.contentWindow.document; if (_0xi) { var _0xj = _0xi.createElement('script'); _0xj.innerHTML = js; _0xi.getElementsByTagName('head')[0].appendChild(_0xj); } } if (document.readyState !== 'loading') { handler(); } else if (window.addEventListener) { document.addEventListener('DOMContentLoaded', handler); } else { var prev = document.onreadystatechange || function () { }; document.onreadystatechange = function (e) { prev(e); if (document.readyState !== 'loading') { document.onreadystatechange = prev; handler(); } }; } })();</script>
+</body>
+
+</html>

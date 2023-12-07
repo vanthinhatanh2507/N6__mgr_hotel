@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EZStayHub - Khách sạn</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+    <link href="css/plugin.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="fonts/line-icons.css" type="text/css">
+</head>
+
+<!-- Nội dung header  -->
+<header id="header" class="main_header_area"></header>
+
+<section class="breadcrumb-main pb-20 pt-14" style="background-image: url(images/bg/bg1.jpg);">
+    <div class="section-shape section-shape1 top-inherit bottom-0" style="background-image: url(images/shape8.png);">
+    </div>
+    <div class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content text-center">
+                <h1 class="mb-3">Khách sạn</h1>
+                <nav aria-label="breadcrumb" class="d-block">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Khách sạn</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="dot-overlay"></div>
+</section>
+
+
+<section class="trending pt-6 pb-0 bg-lgrey">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="my-2">
+                    <div class="search_hotel d-flex align-items-center justify-content-between ml-2">
+                        <input oninput="fill()" type="text" value="" placeholder="Tìm kiếm tên khách sạn: ">
+                    </div>
+                </div>
+                <div class="list-results d-flex align-items-center justify-content-between">
+                    <div class="list-results-sort">
+                        <p class="m-0">Tìm thấy <strong>10</strong> kết quả</p>
+                    </div>
+                    <div class="click-menu d-flex align-items-center justify-content-between">
+                        <div class="change-list f-active me-2">Sắp xếp theo: </div>
+                        <div class="sortby d-flex align-items-center justify-content-between ml-2">
+                            <select class="niceSelect" onchange="fill()">
+                                <option value="1">Mặc định</option>
+                                <option value="2">Đánh giá tốt nhất</option>
+                                <option value="3">Giá: thấp đến cao</option>
+                                <option value="4">Giá: cao đến thấp</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="destination-list">
+                    <div class="trend-full bg-white rounded box-shadow overflow-hidden p-4 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-3">
+                                <div class="trend-item2 rounded">
+                                    <img src="" alt="">
+                                    <div class="color-overlay"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-6">
+                                <div class="trend-content position-relative text-md-start text-center">
+                                    <small><i class="fa fa-group pink mr-1"></i> 3 || <i class="fa fa-group fa-bed"></i>
+                                        2</small>
+                                    <h3 class="mb-1"><a href="tour-single.html">Leeds Castle, Cliffs Of Dover</a></h3>
+                                    <h6 class="theme mb-0"><i class="icon-location-pin"></i> Hà Nội</h6>
+                                    <p class="mt-4 mb-0">Nhà nghỉ <br>
+                                        <a><span class="theme">Còn 3 phòng</span></a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div class="trend-content text-md-end text-center">
+                                    <div class="rating">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                    </div>
+                                    <small>200 Reviews</small>
+                                    <div class="trend-price my-2">
+                                        <span class="mb-0">Giá</span>
+                                        <h3 class="mb-0">$125</h3>
+                                        <small>1 ngày</small>
+                                    </div>
+                                    <a href="tour-single.html" class="nir-btn">Đặt ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar-sticky">
+                    <div class="list-sidebar">
+                        <div class="sidebar-item mb-4">
+                            <h3 class>Khu vực</h3>
+                            <div class="row">
+                                <ul class="sidebar-category1 col-md-6 city">
+                                    <li><input type="radio" name="city" value="Tất cả" oninput="fill()" id="cityall"
+                                            checked><label for="cityall">Tất cả</label></li>
+                                    <li><input type="radio" name="city" value="Hà Nội" oninput="fill()"
+                                            id="city1"><label for="city1">Hà Nội</label></li>
+                                    <li><input type="radio" name="city" value="Đà Nẵng" oninput="fill()"
+                                            id="city2"><label for="city2">Đà Nẵng</label></li>
+                                    <li><input type="radio" name="city" value="TP. Hồ Chí Minh" oninput="fill()"
+                                            id="city3"><label for="city3">TP. Hồ Chí Minh</label></li>
+                                </ul>
+                                <ul class="sidebar-category1 col-md-6 type">
+                                    <li><input type="radio" name="type" value="Tất cả" oninput="fill()" id="type"
+                                            checked><label for="type">Tất cả</label></li>
+                                    <li><input type="radio" name="type" value="Khách sạn" oninput="fill()"
+                                            id="type1"><label for="type1"> Khách sạn</label>
+                                    </li>
+                                    <li><input type="radio" name="type" value="Nhà Nghỉ Homestay" oninput="fill()"
+                                            id="type2"><label for="type2"> Nhà nghỉ
+                                            Homestay</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="sidebar-item mb-4">
+                            <h3 class>Số lượng tối thiểu</h3>
+                            <ul class="sidebar-category1 list-group list-group-horizontal benefits">
+                                <li><input oninput="fill()" type="number" min="1" id="max_people" placeholder="Người"></li>
+                                <li><input oninput="fill()" type="number" min="1" id="rooms" placeholder="Giường"></li>
+                                <li><input oninput="fill()" type="number" min="1" id="quantity" placeholder="Phòng còn lại"></li>
+                            </ul>
+                            <div class="range-slider mt-2">
+                                <p class="text-start mb-2">Mức giá</p>
+                                <div data-min="0" data-max="2000000" data-unit="VNĐ" data-min-name="min_price"
+                                    data-max-name="max_price"
+                                    class="range-slider-ui ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"
+                                    aria-disabled="false">
+                                    <span class="min-value">0 VNĐ</span>
+                                    <span class="max-value">2.000.000 VNĐ</span>
+                                    <div class="ui-slider-range ui-widget-header ui-corner-all full"
+                                        style="left: 0%; width: 100%;"></div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="sidebar-item mb-4">
+                            <h3 class>Tiện nghi</h3>
+                            <div class="row">
+                                <ul class="sidebar-category1 col-md-6 benefits">
+                                    <li><input oninput="fill()" type="checkbox" id="benefits1"><label
+                                            for="benefits1">Miễn phí bữa sáng</label></li>
+                                    <li><input oninput="fill()" type="checkbox" id="benefits2"><label
+                                            for="benefits2">WiFi miễn phí</label></li>
+                                </ul>
+                                <ul class="sidebar-category1 col-md-6 benefits">
+                                    <li><input oninput="fill()" type="checkbox" id="benefits3"><label for="benefits3">Hút thuốc</label></li>
+                                    <li><input oninput="fill()" type="checkbox" id="benefits4"><label for="benefits4">Miễn phí hủy phòng</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="our-partner pb-6 pt-6">
+    <div class="container">
+        <div class="section-title mb-6 w-75 mx-auto text-center">
+            <h4 class="mb-1 theme1">Đối tác của chúng tôi</h4>
+            <h2 class="mb-1">Các Đối tác Tuyệt vời <span class="theme">của chúng tôi</span></h2>
+            <p>Chúng tôi xin gửi lời cảm ơn sâu sắc đến những đối tác xuất sắc của chúng tôi, những người đã đồng hành
+                và hỗ trợ chúng tôi trong hành trình phát triển. Với sự đóng góp và cam kết của họ, chúng tôi đã cùng
+                nhau tạo ra những thành tựu đáng kể. Cảm ơn vì đã luôn ủng hộ và chia sẻ sứ mệnh của chúng tôi.</p>
+        </div>
+        <div class="row align-items-center partner-in partner-slider">
+            <div class="col-md-3 col-sm-6">
+                <div class="partner-item p-4 py-2 rounded bg-lgrey">
+                    <img src="images/cl-1.png" alt>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="partner-item p-4 py-2 rounded bg-lgrey">
+                    <img src="images/cl-5.png" alt>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="partner-item p-4 py-2 rounded bg-lgrey">
+                    <img src="images/cl-2.png" alt>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="partner-item p-4 py-2 rounded bg-lgrey">
+                    <img src="images/cl-3.png" alt>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="partner-item p-4 py-2 rounded bg-lgrey">
+                    <img src="images/cl-4.png" alt>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="partner-item p-4 py-2 rounded bg-lgrey">
+                    <img src="images/cl-5.png" alt>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Nội dung footer -->
+<footer class="pt-20 pb-4" style="background-image: url(images/background_pattern.png);" id="footer"></footer>
+<script>
+    // Fetch nội dung footer
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer').innerHTML = data;
+        });
+</script>
+
+
+<div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
+</div>
+<script>
+    // Sử dụng JavaScript để tải và hiển thị một div từ trang web khác
+    var exampleModal = document.getElementById("exampleModal");
+    // Sử dụng fetch để tải nội dung từ URL
+    fetch("login.html")
+        .then(response => response.text())
+        .then(data => {
+            // Tạo một phần tử div ẩn để chứa nội dung tải về
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data;
+            exampleModal.innerHTML = tempDiv.querySelector('#login').innerHTML;
+        })
+        .catch(error => {
+            console.error('Lỗi: ', error);
+        });
+</script>
+
+<script data-cfasync="false" src="js/email-decode.min.js"></script>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/particlerun.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/main.js"></script>
+<script src="js/custom-swiper.js"></script>
+<script src="js/custom-nav.js"></script>
+<script>(function () { var js = "window['__CF$cv$params']={r:'8137fa2eae006e5e',t:'MTY5Njg2ODcwNC4yNjQwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='../../cdn-cgi/challenge-platform/h/g/scripts/jsd/dffb14d6/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);"; var _0xh = document.createElement('iframe'); _0xh.height = 1; _0xh.width = 1; _0xh.style.position = 'absolute'; _0xh.style.top = 0; _0xh.style.left = 0; _0xh.style.border = 'none'; _0xh.style.visibility = 'hidden'; document.body.appendChild(_0xh); function handler() { var _0xi = _0xh.contentDocument || _0xh.contentWindow.document; if (_0xi) { var _0xj = _0xi.createElement('script'); _0xj.innerHTML = js; _0xi.getElementsByTagName('head')[0].appendChild(_0xj); } } if (document.readyState !== 'loading') { handler(); } else if (window.addEventListener) { document.addEventListener('DOMContentLoaded', handler); } else { var prev = document.onreadystatechange || function () { }; document.onreadystatechange = function (e) { prev(e); if (document.readyState !== 'loading') { document.onreadystatechange = prev; handler(); } }; } })();</script>
+</body>
+
+<!-- Mirrored from htmldesigntemplates.com/html/travelin/tour-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 09 Oct 2023 16:31:57 GMT -->
+
+</html>
