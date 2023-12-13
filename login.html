@@ -22,13 +22,7 @@
                         <div aria-labelledby="login-tab" class="tab-pane fade active show" id="login"
                             role="tabpanel">
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="blog-image rounded">
-                                        <a href="#"
-                                            style="background-image: url(images/trending/trending5.jpg);"></a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <h4 class="text-center border-b pb-2">Đăng nhập</h4>
                                     <form method="post" action="backend/auth.php" name="contactform" id="contactform">
                                         <div class="form-group mb-2">
@@ -49,13 +43,7 @@
     
                         <div aria-labelledby="register-tab" class="tab-pane fade" id="register" role="tabpanel">
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="blog-image rounded">
-                                        <a href="#"
-                                            style="background-image: url(images/trending/trending5.jpg);"></a>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <h4 class="text-center border-b pb-2">Đăng ký</h4>
                                     <form method="post" action="backend/add.php?user=true" name="contactform1" id="contactform1" class="form-floating">
                                         <div class="form-group mb-2" id="floatingInputInvalid">
@@ -69,6 +57,14 @@
                                         <div class="form-group mb-2">
                                             <input type="text" name="name" class="form-control" id="name"
                                                 placeholder="Họ và tên">
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <input type="email" name="email" class="form-control" id="email"
+                                                placeholder="Địa chỉ email">
+                                        </div>
+                                        <div class="form-group mb-2">
+                                            <input type="tel" name="phone" class="form-control" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                                placeholder="Số điện thoại">
                                         </div>
                                         <div class="comment-btn mb-2 pb-2 text-center border-b">
                                             <input type="submit" class="nir-btn w-100 btn-secondary" id="signup"
