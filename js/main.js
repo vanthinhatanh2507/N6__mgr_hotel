@@ -47,7 +47,7 @@
         var minName = $(this).attr('data-min-name');
         var maxName = $(this).attr('data-max-name');
         var unit = $(this).attr('data-unit');
-        
+
         $(this).slider({
             range: true,
             min: minRangeValue,
@@ -57,22 +57,22 @@
                 event = event;
                 var currentMin = parseInt(ui.values[0]);
                 var currentMax = parseInt(ui.values[1]);
-    
+
                 // Sử dụng toLocaleString để định dạng giá trị
                 var formattedMin = currentMin.toLocaleString();
                 var formattedMax = currentMax.toLocaleString();
-    
+
                 $(this).children(".min-value").text(formattedMin + " " + unit);
                 $(this).children(".max-value").text(formattedMax + " " + unit);
                 $(this).children(".current-min").val(currentMin);
                 $(this).children(".current-max").val(currentMax);
-    
+
                 // Gọi hàm xử lý sau khi phần trượt thay đổi giá trị
                 handleSliderChange(currentMin, currentMax);
             }
-        }); 
+        });
     });
-    
+
 
 
     /* ------------------------------------------------------------------------ */
@@ -560,7 +560,14 @@ function getCookie(name) {
 document.addEventListener("DOMContentLoaded", function () {
     hienThiThoiGian();
     if (getCookie("name")) {
-        document.querySelector(".register-login.align-items-center").innerHTML = `<div><i class="icon-user"></i> ${decodeURIComponent(getCookie("name"))}</div> <hr> <a href="backend/diecookie.php">Đăng xuất</a>`
+        document.querySelector(".register-login.align-items-center").innerHTML = `
+        <div class="d-flex">
+        <div><i class="icon-user"></i> ${decodeURIComponent(getCookie("name"))}</div> 
+            <a href="profile.html" class="mx-2">Lịch sử đơn</a>
+        </div>
+        <hr> 
+        <a href="backend/diecookie.php">Đăng xuất</a>
+        `
     } else {
         var urlParams = new URLSearchParams(window.location.search);
         var error = urlParams.get('error');

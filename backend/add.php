@@ -103,9 +103,12 @@ class AddController
         $checkin = $_POST["checkin"];
         $checkout = $_POST["checkout"];
         $time = date("Y-m-d H:i:s");
-
-        $sql = "INSERT INTO booking (name, hotel_id, gender, email, phone, rooms, people, checkin, checkout, time) 
-                VALUES ('$name', '$id', '$gender', '$email', '$phone', $rooms, $people, '$checkin', '$checkout', '$time')";
+        $user_id = 'NULL';
+        if(isset($_COOKIE['user_id'])) {
+            $user_id = $_COOKIE['user_id'];
+        }
+        $sql = "INSERT INTO booking (name, hotel_id, gender, email, phone, rooms, people, checkin, checkout, time, user_id) 
+                VALUES ('$name', '$id', '$gender', '$email', '$phone', $rooms, $people, '$checkin', '$checkout', '$time', $user_id)";
 
         $this->executeQuery($sql, "../index.html?id");
     }

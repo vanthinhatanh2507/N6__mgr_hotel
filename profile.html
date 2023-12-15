@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EZStayHub - Khách sạn</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+
+    <link href="css/plugin.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="fonts/line-icons.css" type="text/css">
+</head>
+
+<!-- Nội dung header  -->
+<header id="header" class="main_header_area"></header>
+<script>
+    // Fetch nội dung header
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header').innerHTML = data;
+
+            // Thêm lớp 'active' cho phần tử có class 'sv'
+            const svElement = document.querySelector('#hotel');
+            if (svElement) {
+                svElement.classList.add('active');
+            }
+        });
+</script>
+
+<section class="breadcrumb-main pb-20 pt-14" style="background-image: url(images/bg/bg1.jpg);">
+    <div class="section-shape section-shape1 top-inherit bottom-0" style="background-image: url(images/shape8.png);">
+    </div>
+    <div class="breadcrumb-outer">
+        <div class="container">
+            <div class="breadcrumb-content text-center">
+                <h1 class="mb-3">Lịch sử đặt phòng</h1>
+                <nav aria-label="breadcrumb" class="d-block">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Lịch sử đặt phòng</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="dot-overlay"></div>
+</section>
+
+<section class="trending pt-6 pb-0 bg-lgrey">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- <div class="my-2">
+                    <div class="search_hotel d-flex align-items-center justify-content-between ml-2">
+                        <input oninput="fill()" type="text" value="" placeholder="Tìm kiếm tên khách sạn: ">
+                    </div>
+                </div> -->
+                <div class="destination-list">
+
+                    <div class="trend-full bg-white rounded box-shadow overflow-hidden p-4 mb-4">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-3">
+                                <div class="trend-item2 rounded">
+                                    <img src="" alt="">
+                                    <div class="color-overlay"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-6">
+                                <div class="trend-content position-relative text-md-start text-center">
+                                    <small><i class="fa fa-group pink mr-1"></i> 3 || <i class="fa fa-group fa-bed"></i>
+                                        2</small>
+                                    <h3 class="mb-1 hotel__name"><a href="tour-single.html">Leeds Castle, Cliffs Of
+                                            Dover</a></h3>
+                                    <h6 class="theme my-1"><i class="icon-calendar"></i> <span></span></h6>
+                                    <h6 class="theme my-1"><i class="icon-calendar"></i> <span></span></h6>
+
+                                    <p class="mt-4 mb-0">Thời gian đặt: <br>
+                                        <a><span class="theme">2023</span></a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div class="trend-content text-md-end text-center">
+                                    <div class="trend-price my-2">
+                                        <span class="mb-0">Tổng hóa đơn</span>
+                                        <h3 class="mb-0 hotel__price">$125</h3>
+                                    </div>
+                                    <a href="tour-single.html" class="btn btn-danger hotel__cancel">Hủy đơn</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- Thêm bảng từ DB -->
+<script>
+    function getCookie(cookieName) {
+        const name = cookieName + "=";
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookie.split(';');
+
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1);
+            }
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length, cookie.length);
+            }
+        }
+        return null;
+    }
+
+    var divToClone = document.querySelector('.trend-full').cloneNode(true)
+    fetch('backend/get_booking.php')
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('.destination-list').innerHTML = ''
+            data = data.filter(item => {
+                return item.user_id == getCookie('user_id')
+            })
+            // Lặp qua từng phần tử trong mảng data
+            data.forEach(function (item) {
+                console.log(item)
+                // Tạo một bản sao của divToClone
+                var clonedDiv = divToClone.cloneNode(true);
+                clonedDiv.querySelector('.hotel__name').textContent = item.hotel_name
+                clonedDiv.querySelector('img').src = item.img
+                time = item.time.split(" ")[0]
+                clonedDiv.querySelector('span.theme').textContent = `${time.split("-")[2]} Th ${time.split("-")[1]}, ${time.split("-")[0]} lúc ${item.time.split(" ")[1]}`
+                // Tính toán chi phí
+                var checkin = item.checkin.split("-");
+                var checkout = item.checkout.split("-");
+
+                var ngay1 = new Date(checkin[0], checkin[1] - 1, checkin[2]);
+                var ngay2 = new Date(checkout[0], checkout[1] - 1, checkout[2]);
+                var soNgay = (ngay2.getTime() - ngay1.getTime()) / (1000 * 60 * 60 * 24);
+
+                if (item.max_people * item.rooms >= item.people) {
+                    clonedDiv.querySelector('.hotel__price').textContent = (item.price * (soNgay + 1)).toLocaleString() + " VNĐ"
+                } else {
+                    clonedDiv.querySelector('.hotel__price').textContent = (item.price * (soNgay + 1) + (100000 * (item.people - item.max_people * item.rooms) * (soNgay + 1))).toLocaleString() + " VNĐ"
+                }
+
+                clonedDiv.querySelectorAll(".theme.my-1 span")[0].textContent = "Checkin: " + item.checkin
+                clonedDiv.querySelectorAll(".theme.my-1 span")[1].textContent = "Checkout: " + item.checkout
+                clonedDiv.querySelector(".hotel__cancel").href = 'backend/delete.php?user=true&booking_id=' + item.id
+
+                // td[0].textContent = item.id
+                // td[2].textContent = item.name
+                // td[3].textContent = item.phone
+                // time = item.time.split(" ")[0]
+                // td[4].textContent = `${time.split("-")[2]} Th ${time.split("-")[1]}, ${time.split("-")[0]} lúc ${item.time.split(" ")[1]}`
+                // td[6].querySelector(".delete").href = `../backend/delete.php?booking_id=${item.id}`
+
+                // // Tính toán chi phí
+                // var checkin = item.checkin.split("-");
+                // var checkout = item.checkout.split("-");
+
+                // var ngay1 = new Date(checkin[0], checkin[1] - 1, checkin[2]);
+                // var ngay2 = new Date(checkout[0], checkout[1] - 1, checkout[2]);
+                // var soNgay = (ngay2.getTime() - ngay1.getTime()) / (1000 * 60 * 60 * 24);
+
+                // if (item.max_people * item.rooms >= item.people) {
+                //     td[5].textContent = (item.price * (soNgay + 1)).toLocaleString() + " VNĐ"
+                // } else {
+                //     td[5].textContent = (item.price * (soNgay + 1) + (100000 * (item.people - item.max_people * item.rooms) * (soNgay + 1))).toLocaleString() + " VNĐ"
+                // }
+
+                // td[6].innerHTML = td[6].innerHTML.replace(/view/g, "view" + item.id);
+
+                // td[6].querySelector("img").src = item.img
+                // td[6].querySelector("strong").textContent = item.name
+                // td[6].querySelector("p a").textContent = item.hotel_name
+                // td[6].querySelector("p a").href = `../hotel-info.html?id=${item.hotel_id}`
+                // td[6].querySelectorAll(".personal-info li")[0].textContent = "Giới tính: " + item.gender
+                // td[6].querySelectorAll(".personal-info li")[1].textContent = "Email: " + item.email
+                // td[6].querySelectorAll(".room-info li")[0].textContent = "Số lượng phòng đặt: " + item.rooms
+                // td[6].querySelectorAll(".room-info li")[1].textContent = "Số lượng người: " + item.people
+                // td[6].querySelectorAll(".checkin-out a")[0].textContent = "Ngày nhập phòng: " + item.checkin
+                // td[6].querySelectorAll(".checkin-out a")[1].textContent = "Ngày trả phòng: " + item.checkout
+
+                document.querySelector('.destination-list').appendChild(clonedDiv)
+            });
+        })
+
+</script>
+
+<!-- Nội dung footer -->
+<footer class="pt-20 pb-4" style="background-image: url(images/background_pattern.png);" id="footer"></footer>
+<script>
+    // Fetch nội dung footer
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer').innerHTML = data;
+        });
+</script>
+
+
+<div class="modal fade log-reg" id="exampleModal" tabindex="-1" aria-hidden="true">
+</div>
+<script>
+    // Sử dụng JavaScript để tải và hiển thị một div từ trang web khác
+    var exampleModal = document.getElementById("exampleModal");
+    // Sử dụng fetch để tải nội dung từ URL
+    fetch("login.html")
+        .then(response => response.text())
+        .then(data => {
+            // Tạo một phần tử div ẩn để chứa nội dung tải về
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data;
+            exampleModal.innerHTML = tempDiv.querySelector('#login').innerHTML;
+        })
+        .catch(error => {
+            console.error('Lỗi: ', error);
+        });
+</script>
+
+<script data-cfasync="false" src="js/email-decode.min.js"></script>
+<script src="js/jquery-3.5.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/particlerun.js"></script>
+<script src="js/plugin.js"></script>
+<script src="js/main.js"></script>
+<script src="js/custom-swiper.js"></script>
+<script src="js/custom-nav.js"></script>
+<script>(function () { var js = "window['__CF$cv$params']={r:'8137fa2eae006e5e',t:'MTY5Njg2ODcwNC4yNjQwMDA='};_cpo=document.createElement('script');_cpo.nonce='',_cpo.src='../../cdn-cgi/challenge-platform/h/g/scripts/jsd/dffb14d6/main.js',document.getElementsByTagName('head')[0].appendChild(_cpo);"; var _0xh = document.createElement('iframe'); _0xh.height = 1; _0xh.width = 1; _0xh.style.position = 'absolute'; _0xh.style.top = 0; _0xh.style.left = 0; _0xh.style.border = 'none'; _0xh.style.visibility = 'hidden'; document.body.appendChild(_0xh); function handler() { var _0xi = _0xh.contentDocument || _0xh.contentWindow.document; if (_0xi) { var _0xj = _0xi.createElement('script'); _0xj.innerHTML = js; _0xi.getElementsByTagName('head')[0].appendChild(_0xj); } } if (document.readyState !== 'loading') { handler(); } else if (window.addEventListener) { document.addEventListener('DOMContentLoaded', handler); } else { var prev = document.onreadystatechange || function () { }; document.onreadystatechange = function (e) { prev(e); if (document.readyState !== 'loading') { document.onreadystatechange = prev; handler(); } }; } })();</script>
+</body>
+
+<!-- Mirrored from htmldesigntemplates.com/html/travelin/tour-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 09 Oct 2023 16:31:57 GMT -->
+
+</html>

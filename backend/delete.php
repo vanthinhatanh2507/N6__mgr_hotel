@@ -35,6 +35,9 @@ class DeleteController
 
     public function deleteBooking()
     {
+        if (isset($_GET['user'])){
+            $this->location = '../profile.html';
+        }
         $sql = "DELETE FROM booking WHERE id = $this->id";
         $this->executeQuery($sql);
     }
